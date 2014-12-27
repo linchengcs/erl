@@ -3,7 +3,7 @@
 -export([init/0,post/3,read/0]).
 
 -record(post,
-        {title, content, date}).
+        {date,title, content}).
 
 init() ->
     mnesia:create_table(post,

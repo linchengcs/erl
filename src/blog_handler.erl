@@ -17,7 +17,9 @@ handle(Req, State) ->
     Title = proplists:get_value(<<"title">>, PostVals),
     Content = proplists:get_value(<<"content">>, PostVals),
     io:format("~p~p~p~p~p",[Method,HasBody,PostVals,Title,Content]),
-    tables:post(Title,Content,<<"123">>),
+    Current = calendar:local_time(),
+    Ts = calendar:datetime_to_gregorian_seconds(Current),
+    tables:post(Title,Content,Ts),
 %%    mnesia:dirty_write(#post{title=Title,content=Content,date=<<"date">>}),
     %% cowboy_req:reply(200, [
     %%                        {<<"content-type">>, <<"text/plain; charset=utf-8">>}

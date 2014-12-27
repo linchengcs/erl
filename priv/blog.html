@@ -1,11 +1,48 @@
+<!Doctype html>
 <html>
   <head>
+    <script src="./static/jquery.min.js"></script>
   </head>
   <body>
-    <form method="post" action="/blog">
-      Title:<input name="title" value="test"><br>
-      Blog:<textarea name="content">write something...</textarea><br>
-      <input type="submit">
-    </form>
-  </body>
+<div>
+      Title:<br><input name="title" value="test" id="title"><br>
+      Blog:<br><textarea name="content" rows="3" cols="20" id="content">write something...</textarea><br>
+  <button onclick="post()">发送</button>
+</div>
+    <div id="blog">
+    </div>
+
+  <script>
+  $(document).ready(function(){
+    $.ajax( {
+      url:"/post",
+      dataType:"json",
+      success : function(data) {
+        for(var str="", i=0; i<data.length; i++){
+          myDate = new Date(data[i].date * 1000);
+          str += "<hr>" + data[i].title + "<br>"  + data[i].content + "<br>"  + myDate.toLocaleString() + "<br>" ;
+        }
+        $("#blog").html(str);
+      }
+    });
+  });
+
+function post(){
+  title=document.getElementById("title").value;
+  content=document.getElementById("content").value;
+  formData="title=" + title + "&" + "content=" + content;
+  $("#blog").prepend("<hr>" + title + "<br>"  + content + "<br>"  + (new Date()).toLocaleString() + "<br>" );
+$.ajax({
+    url : "/blog",
+    type: "POST",
+    data : formData,
+    success: function(data, textStatus, jqXHR)
+    {
+      alert(formData);
+    }
+});
+}
+</script>
+
+</body>
 </html>
