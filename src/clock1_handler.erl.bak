@@ -1,0 +1,90 @@
+-module(clock1_handler).
+-behaviour(cowboy_websocket_handler).
+
+-export([init/3]).
+-export([websocket_init/3]).
+-export([websocket_handle/3]).
+-export([websocket_info/3]).
+-export([websocket_terminate/3]).
+
+websocket_init(_Transport, Req, _Env) ->
+         io:format("Initialising a web socket:(~p)(~p)(~p)",
+                   [_Transport, _Env, path(Req)]),
+    ["/", "websocket", ModStr] = path(Req),
+    %% Args = args(Req),
+    Req1 = cowboy_req:compact(Req),
+    Self = self(),
+    Mod = list_to_atom(ModStr),
+    %% Spawn an erlang handler
+    Pid = spawn_link(Mod, start, [Self]),
+    {ok, Req1, Pid, hibernate}.
+
+websocket_handle({text, Msg}, Req, Pid) ->
+    %% This is a Json message from the browser
+    case catch mochijson2:decode(Msg) of
+        {'EXIT', _Why} ->
+            Pid ! {invalidMessageNotJSON, Msg};
+        {struct, X} = Z ->
+            X1 = atomize(Z),
+            Pid ! {self(), X1};
+        Other ->
+            Pid ! {invalidMessageNotStruct, Other}
+    end,
+    {ok, Req, Pid}.
+
+websocket_info({send,Str}, Req, Pid) ->
+    {reply, {text, Str}, Req, Pid, hibernate};
+websocket_info([{cmd,_}|_]=L, Req, Pid) ->
+    B = list_to_binary(mochijson2:encode([{struct,L}])),
+    {reply, {text, B}, Req, Pid, hibernate};
+websocket_info(Info, Req, Pid) ->
+    io:format("Handle_info Info:~p Pid:~p~n",[Info,Pid]),
+    {ok, Req, Pid, hibernate}.
+
+websocket_terminate(_Reason, _Req, Pid) ->
+    io:format("websocket.erl terminate:~n"),
+    exit(Pid, socketClosed),
+    ok.
+
+reply_json(Obj, Req, Env) ->
+    %% Encode Obj as JSON and send to the browser
+    Json = mochijson2:encode(Obj),
+    {ok, Req1} = send_page(json, Json, Req),
+    {ok, Req1, Env}.
+
+binary_to_atom(B) ->
+    list_to_atom(binary_to_list(B)).
+
+rpc(Pid, M) ->
+    S = self(),
+    Pid ! {S, M},
+    receive
+        {Pid, Reply} ->
+            Reply
+    end.
+
+%%----------------------------------------------------------------------
+%% atomize turns all the keys in a struct to atoms
+
+atomize({struct,L}) ->
+    {struct, [{binary_to_atom(I), atomize(J)} || {I, J} <- L]};
+atomize(X) ->
+    X.
+
+%%----------------------------------------------------------------------
+%% these are to be called from the gui client code
+
+append_div(Ws, Div, X) ->
+    Bin = list_to_binary(X),
+    send_websocket(Ws,
+                   [{cmd,append_div},{id,Div},{txt,Bin}]).
+
+fill_div(Ws, Div, X) ->
+    io:format("websockets X=~p~n",[X]),
+    Bin = list_to_binary(X),
+    send_websocket(Ws,
+                   [{cmd,fill_div},{id,Div},{txt,Bin}]).
+
+
+send_websocket(Ws, X) ->
+    Ws ! {send, list_to_binary(mochijson2:encode([{struct,X}]))}.

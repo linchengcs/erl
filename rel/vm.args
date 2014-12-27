@@ -1,0 +1,4 @@
+-name blog@127.0.0.1
+-setcookie blog
+-mnesia dir '"/home/rick/workspace/erl/db"'
+-heart

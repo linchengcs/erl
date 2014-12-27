@@ -1,0 +1,19 @@
+{application, blog, [
+	{description, ""},
+	{vsn, "0.1.0"},
+	{id, "git"},
+	{modules, []},
+	{registered, []},
+	{applications, [
+		kernel,
+		stdlib,
+                        sasl,
+                        cowboy,
+                        erlydtl,
+			observer,
+			wx,
+                        mnesia
+	]},
+	{mod, {blog_app, []}},
+	{env, []}
+]}.

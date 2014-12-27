@@ -1,0 +1,3 @@
+* TODO blog_view_handler send model to dtl
+* TODO mnesia select multiple rows, dtl render
+* TODO mnesia store to a safe place

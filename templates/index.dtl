@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Rick's Blog</title>
+  </head>
+
+  <body>
+    <h1>{{name}}'s Blog</h1>
+    <p>{{name}} is a good guy</p>
+
+  </body>
+</html>
