@@ -34,7 +34,8 @@ start(_Type, _Args) ->
 	%% 	{env, [{dispatch, Dispatch}]},
 	%% 	{middlewares, [cowboy_router, markdown_converter, cowboy_handler]}
 	%% ]),
-
+%    spawn(tcp_server, start, []),
+    tcp_server:start(),
     blog_sup:start_link().
 
 stop(_State) ->

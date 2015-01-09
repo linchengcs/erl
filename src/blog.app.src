@@ -10,8 +10,10 @@
                         sasl,
                         cowboy,
                         erlydtl,
+			runtime_tools,
 			observer,
 			wx,
+			xmerl,
                         mnesia
 	]},
 	{mod, {blog_app, []}},
