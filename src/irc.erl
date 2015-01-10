@@ -13,15 +13,16 @@ loop(L) ->
 	{broadcast, Pid, Txt} ->
 	    case lists:member(Pid,L) of
 		false ->
-		    L1 = L ++ [Pid];
+		    L1 = L ++ [Pid],
+                    broadcast(L1, Txt),
+                    loop(L1);
 		_ ->
-                    L1 = L
-	    end,
-	    broadcast(L1, Txt),
-	    loop(L1);
-	X ->
-	    io:format("irc:received:~p~n",[X]),
-	    loop(L)
+                    broadcast(L, Txt),
+                    loop(L)
+	    end;
+        X ->
+            io:format("irc:received:~p~n",[X]),
+            loop(L)
     end.
 
 broadcast(L,  B) ->
