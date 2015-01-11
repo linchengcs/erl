@@ -100,8 +100,13 @@
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="http://tinymce.cachefly.net/4.1/tinymce.min.js"></script>
   <script>
   $(document).ready(function(){
+	tinymce.init({
+	                selector: "textarea"
+			           });
+
     $.ajax( {
       url:"/post",
       dataType:"json",
@@ -120,11 +125,13 @@ function show_create(){
     $("#create-form").attr("style", "display:none");
   } else {
     $("#create-form").removeAttr("style");
+    $('html, body').animate({scrollBottom: $(document).height()}, 'slow');
   }
 }
       function post(){
       title=document.getElementById("title").value;
-      content=document.getElementById("content").value;
+//      content=document.getElementById("content").value;
+      content = tinymce.get('content').getContent(); 
       formData="title=" + title + "&" + "content=" + content;
       $("#blog").prepend("<hr>" + title + "<br>"  + content + "<br>"  + (new Date()).toLocaleString() + "<br>" );
       $.ajax({
@@ -139,5 +146,6 @@ function show_create(){
       }
 
 </script>
-  </body>
+
+</body>
 </html>
