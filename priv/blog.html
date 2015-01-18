@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Blog Template for Bootstrap</title>
+    <title>Rick's Blog</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -104,8 +104,9 @@
   <script>
   $(document).ready(function(){
 	tinymce.init({
-	                selector: "textarea"
-			           });
+	  selector: "textarea",
+          plugins: "code"
+	});
 
     $.ajax( {
       url:"/post",
@@ -113,7 +114,7 @@
       success : function(data) {
         for(var str="", i=0; i<data.length; i++){
           myDate = new Date(data[i].date * 1000);
-          str += "<hr>" + data[i].title + "<br>"  + data[i].content + "<br>"  + myDate.toLocaleString() + "<br>" ;
+          str +=  "<div class='blog-post-title'>" + data[i].title + "</div><div class='blog-post'>"  + data[i].content + "</div><div class='blog-post-attr'>"  + myDate.toLocaleString() + "</div>" ;
         }
         $("#blog").html(str);
       }
