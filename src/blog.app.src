@@ -14,7 +14,8 @@
 			observer,
 			wx,
 			xmerl,
-                        mnesia
+                        mnesia,
+                        emongo
 	]},
 	{mod, {blog_app, []}},
 	{env, []}
