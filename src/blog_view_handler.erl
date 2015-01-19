@@ -16,20 +16,20 @@ view() ->
 
 init(_, Req, _Ops) ->
 
-    %% Table = mnesia:table(post),
-    %% Query = qlc:q([P || P <- Table]),
-    %% Query1 = qlc:sort(Query, [{order, descending}]),
-    %% Rs = do(Query1),
-    %% _PL = [{struct,record_to_proplist(X)} || X <- Rs],
-    %% _Json = mochijson2:encode({array,_PL}),
-    %% io:format("~p",[_Json]),
+    Table = mnesia:table(post),
+    Query = qlc:q([P || P <- Table]),
+    Query1 = qlc:sort(Query, [{order, descending}]),
+    Rs = do(Query1),
+    _PL = [{struct,record_to_proplist(X)} || X <- Rs],
+    _Json = mochijson2:encode({array,_PL}),
+    io:format("~p",[_Json]),
 
-    PL = emongo:find(post,"post",[{orderby,[{"date", desc}]}]),
-    _PL = [ {struct, Y} || [_| Y] <- PL],
-    _Json = mochijson2:encode({array, _PL}),
+    %% PL = emongo:find(post,"post"),
+    %% _PL = [ {struct, Y} || [_| Y] <- PL],
+    %% _Json = mochijson2:encode({array, _PL}),
 
-        io:format("~p~n",[PL]),
-    io:format("~p~n",[_PL]),
+    %%     io:format("~p~n",[PL]),
+    %% io:format("~p~n",[_PL]),
 
 
 

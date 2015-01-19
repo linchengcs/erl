@@ -33,7 +33,7 @@ handle(Req, State) ->
     %% io:format("Received file ~p of content-type ~p as follow:~n~p~n~n",
     %%           [Filename, ContentType, Data]),
 
-    emongo:add_pool(post,"localhost", 27017, "db_post", 1),
+
     emongo:insert(post, "post", [{"title",Title}, {"content", Content}, {"date", Ts}]),
 
     cowboy_req:reply(200, [
