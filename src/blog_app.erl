@@ -35,6 +35,7 @@ start(_Type, _Args) ->
 	%% 	{middlewares, [cowboy_router, markdown_converter, cowboy_handler]}
 	%% ]),
 %    spawn(tcp_server, start, []),
+    emongo:add_pool(post,"localhost", 27017, "db_post", 1),
     server_chat:start(),
     blog_sup:start_link().
 

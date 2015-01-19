@@ -113,7 +113,7 @@
       dataType:"json",
       success : function(data) {
         for(var str="", i=0; i<data.length; i++){
-          myDate = new Date((data[i].date-62167144220) * 1000);
+          myDate = new Date((data[i].date) * 1000);
           str +=  "<div class='blog-post-title'>" + data[i].title + "</div><div class='blog-post'>"  + data[i].content + "</div><div class='blog-post-attr'>"  + myDate.toLocaleString() + "</div>" ;
         }
         $("#blog").html(str);

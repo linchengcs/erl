@@ -2,6 +2,8 @@
 
 -export([view/1, view/0, init/3]).
 
+-export([do/1, record_to_proplist/1]).
+
 -include_lib("stdlib/include/qlc.hrl").
 
 -record(post,{date,title,content}).
@@ -13,24 +15,22 @@ view() ->
     mnesia:dirty_read(post,<<"">>).
 
 init(_, Req, _Ops) ->
-%%     [Val | _] = view(<<"test">>),
-%% %%    io:format("~p", [Val]),
-%%     #post{title=_Title, content=_Content, date=_Date} = Val,
-%% %%    io:format("~p",[_Title]),
 
-    Table = mnesia:table(post),
-    Query = qlc:q([P || P <- Table]),
-    Query1 = qlc:sort(Query, [{order, descending}]),
-    Rs = do(Query1),
-    %% [_Val1 | _] = Rs,
-    %% _PL = record_to_proplist(_Val1),
-    %% _Json = mochijson2:encode({struct,_PL}),
-    %% io:format("~n~n~n~p~n~n~n~n",[Rs]),
-    %% io:format("~p~p", [_PL,_Json]),
+    %% Table = mnesia:table(post),
+    %% Query = qlc:q([P || P <- Table]),
+    %% Query1 = qlc:sort(Query, [{order, descending}]),
+    %% Rs = do(Query1),
+    %% _PL = [{struct,record_to_proplist(X)} || X <- Rs],
+    %% _Json = mochijson2:encode({array,_PL}),
+    %% io:format("~p",[_Json]),
 
-    _PL = [{struct,record_to_proplist(X)} || X <- Rs],
-    _Json = mochijson2:encode({array,_PL}),
-    io:format("~p",[_Json]),
+    PL = emongo:find(post,"post",[{orderby,[{"date", desc}]}]),
+    _PL = [ {struct, Y} || [_| Y] <- PL],
+    _Json = mochijson2:encode({array, _PL}),
+
+        io:format("~p~n",[PL]),
+    io:format("~p~n",[_PL]),
+
 
 
 
