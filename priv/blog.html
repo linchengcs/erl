@@ -105,7 +105,11 @@
   $(document).ready(function(){
 	tinymce.init({
 	  selector: "textarea",
-          plugins: "code"
+          plugins: "code",
+  entity_encoding : "raw",
+  add_unload_trigger : false,
+  remove_linebreaks : false,
+  apply_source_formatting : false
 	});
 
     $.ajax( {
