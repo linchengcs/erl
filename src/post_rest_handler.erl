@@ -1,17 +1,26 @@
 -module(post_rest_handler).
 
--export([init/3, allowed_methods/2, content_types_accepted/2]).
+-export([init/3, allowed_methods/2, content_types_accepted/2, rest_terminate/2]).
 
 -export([put_post/2, delete_resource/2]).
 
 init(_Transport, _Req, []) ->
-    {upgrade, protocol, cowboy_rest}.
+    {Token, _Req1}  = cowboy_req:qs_val(<<"token">>, _Req),
+    case authenticate:token(Token) of
+        true ->
+            {upgrade, protocol, cowboy_rest};
+        _ ->
+            {halt, _Req1, ok}
+    end.
 
 allowed_methods(Req, State) ->
     {[<<"PUT">>,<<"DELETE">>], Req, State}.
 
 content_types_accepted(Req, State) ->
     {[{{<<"application">>,<<"x-www-form-urlencoded">>,[]},put_post}], Req, State}.
+
+rest_terminate(_Req, _State) ->
+    ok.
 
 put_post(Req, State) ->
     {Method, Req2} = cowboy_req:method(Req),
