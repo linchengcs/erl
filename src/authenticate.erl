@@ -1,6 +1,6 @@
 -module(authenticate).
 
--export([authenticate/2, valid/1]).
+-export([authenticate/2, valid/1, token/1]).
 
 authenticate(<<"rick">>, <<"chenglin">>) ->
     true;
@@ -20,3 +20,8 @@ valid(Req) ->
         _ ->
             false
     end.
+
+token(<<"cptbtptpbcptdtptp">>) ->
+    true;
+token(_Other) ->
+    false.

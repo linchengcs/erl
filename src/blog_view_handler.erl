@@ -23,22 +23,23 @@ init(_, Req, _Ops) ->
     %% _PL = [{struct,record_to_proplist(X)} || X <- Rs],
     %% _Json = mochijson2:encode({array,_PL}),
     %% io:format("~p",[_Json]),
+    {Token, Req1}  = cowboy_req:qs_val(<<"token">>, Req),
+    case authenticate:token(Token) of
+        true ->
+            PL = emongo:find(post,"post",[{"date",[{'>=',0}]}],[{orderby,[{"date",desc}]}]),
+            _PL = [ {struct,  _Y} || [_ | _Y] <- PL],
+            _Json = mochijson2:encode({array, _PL}),
 
-    PL = emongo:find(post,"post",[{"date",[{'>=',0}]}],[{orderby,[{"date",desc}]}]),
-    _PL = [ {struct, Y} || [_| Y] <- PL],
-    _Json = mochijson2:encode({array, _PL}),
+            %% io:format("~p~n",[PL]),
+            %% io:format("~p~n",[_PL]),
 
-        io:format("~p~n",[PL]),
-    io:format("~p~n",[_PL]),
-
-
-
-
-
-    _Out = _Json,
-    Req = cowboy_req:reply(200, [{<<"content-type">>,<<"text/html">>}],_Out, Req),
-    {ok, Req, _Ops}.
-
+            _Out = _Json,
+            Req2 = cowboy_req:reply(200, [{<<"content-type">>,<<"text/html">>}],_Out, Req1),
+            {ok, Req2, _Ops};
+        _ ->
+            cowboy_req:reply(200, [{<<"content-type">>,<<"text/html">>}],<<"">>, Req1),
+            {error, Req1, _Ops}
+    end.
 
 %%% private function %%%
 do(Q) ->

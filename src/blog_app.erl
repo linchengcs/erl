@@ -13,6 +13,8 @@ start(_Type, _Args) ->
     Dispatch = cowboy_router:compile([{'_',[
 					    {"/",index_handler,[]},
 					    {"/get",get_handler,[]},
+					    {"/login",login_handler,[]},
+					    {"/post_rest",post_rest_handler,[]},
 					    {"/post",blog_view_handler,[]},
 					    {"/blog",blog_handler,[]},
                                             {"/cookie",cookie_handler,[]},
@@ -26,6 +28,8 @@ start(_Type, _Args) ->
                                             {"/upload",upload_handler,[]},
 					    {"/create",create_handler,[]},
 					    {"/save",save_handler,[]},
+                                            {"/input_video", input_video_handler,[]},
+                                            {"/video_ws", video_ws_handler,[]},
                                             {"/[...]", cowboy_static, {priv_dir, blog, "",[{mimetypes, cow_mimetypes, all}]}},
 					    {"/hello", hello_handler,[]}
 					   ]}]),
@@ -37,6 +41,7 @@ start(_Type, _Args) ->
 %    spawn(tcp_server, start, []),
     emongo:add_pool(post,"localhost", 27017, "db_post", 1),
     server_chat:start(),
+    video_broadcast:start(),
     blog_sup:start_link().
 
 stop(_State) ->

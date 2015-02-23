@@ -16,17 +16,15 @@ handle(Req, State) ->
     Username = proplists:get_value(<<"username">>, PostVals),
     Password = proplists:get_value(<<"password">>, PostVals),
     Bool = authenticate:authenticate(Username, Password),
-    case Bool of
-        true ->
-            cowboy_req:set_resp_cookie(<<"username">>, <<"rick">>, [{path, <<"/">>}], Req2);
-        false ->
-            cowboy_req:set_resp_cookie(<<"username">>, <<"nobody">>, [{path, <<"/">>}], Req2)
-    end,
-    {Cookie,Req3} = cowboy_req:cookie(<<"username">>,Req2),
-    io:format("~p", [Cookie]),
+    Json = case Bool of
+               true ->
+                   <<"{\"ret\":0,\"username\":\"rick\",\"token\":\"cptbtptpbcptdtptp\"}">>;
+               false ->
+                   <<"{\"ret\":1,\"username\":\"rick\"}">>
+           end,
     {ok, Req4} = cowboy_req:reply(200,
                                   [{<<"content-type">>, <<"text/html">>}],
-                                  <<"you have logged in">>, Req3),
+                                  Json, Req2),
     {ok, Req4, State}.
 
 terminate(_Reason, _Req, _State) ->
