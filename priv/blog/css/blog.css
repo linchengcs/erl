@@ -7,6 +7,10 @@ body {
   color: #555;
 }
 
+a {
+    cursor:pointer
+}
+
 @media (min-width: 1200px) {
   .container {
     width: 970px;
@@ -32,7 +36,7 @@ body {
   color: #fff;
   text-decoration: none;
 }
-
+<
 /* Active state gets a caret at the bottom */
 .blog-nav .active {
   color: #fff;
@@ -49,4 +53,13 @@ body {
   border-right: 5px solid transparent;
   border-bottom: 5px solid;
   border-left: 5px solid transparent;
+}
+
+.pager {
+    margin:auto
+}
+
+.pager input {
+    width: 28px;
+    height: 22px;
 }

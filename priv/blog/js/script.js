@@ -83,7 +83,7 @@
       $scope.save = function(){
         $http({
           method: 'PUT',
-          url: "../post_rest",
+          url: "../post_rest?token="+$cookies.token,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           transformRequest: function(obj) {
             var str = [];
@@ -95,16 +95,17 @@
         })
           .success(function (data, status, header, config) {
             $scope.show_form = false;
-            getPosts($scope.page, $scope.size);
+            $scope.getPosts($scope.page, $scope.size);
           })
           .error(function (data, status, header, config) {
             alert('save post fail');
           });
       };
       $scope.delete = function(old_post){
+        if (!confirm("sure?")) return 0;
         $http({
           method: 'DELETE',
-          url: "../post_rest",
+          url: "../post_rest?token="+$cookies.token,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           transformRequest: function(obj) {
             var str = [];
@@ -116,7 +117,7 @@
         })
           .success(function (data, status, header, config) {
             $scope.show_form = false;
-            getPosts($scope.page, $scope.size);
+            $scope.getPosts($scope.page, $scope.size);
           })
           .error(function (data, status, header, config) {
             alert('save post fail');
@@ -124,20 +125,25 @@
       };
       $scope.cancel = function(){$scope.show_form = false;};
 
-      var getPosts = function (page, size) {
+      $scope.getPosts = function (page, size) {
         $http({
           method: 'GET',
           url: '../post',
           params: {page:page, size:size, token:$cookies.token}
         })
           .success(function (data, status, header, config){
-            $scope.posts = data;
+            if (page >= 0) {
+              $scope.posts = data;
+            }else{
+              $scope.page_count = Math.floor(data.post_count/$scope.size);
+            }
           })
           .error(function (data, status, header, config) {
             alert('getPost fail');
             $scope.posts = null;
           });
       };
-      getPosts($scope.page, $scope.size);
+      $scope.getPosts(-1, $scope.size);
+      $scope.getPosts($scope.page, $scope.size);
     }]);
 })(window.angular);
