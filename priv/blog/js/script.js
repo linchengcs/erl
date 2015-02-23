@@ -145,5 +145,8 @@
       };
       $scope.getPosts(-1, $scope.size);
       $scope.getPosts($scope.page, $scope.size);
+      $scope.timestring = function(seconds) {
+        return (new Date((seconds - 62167241434 - 6600)*1000)).toLocaleString();
+      };
     }]);
 })(window.angular);
