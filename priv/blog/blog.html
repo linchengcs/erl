@@ -20,18 +20,31 @@
   </div>
 
   <div ng-repeat="post in posts">
-    <hr>
-    {{post.title}}<br>
+    <div class="post-title">
+      {{post.title}}
+    </div>
     <div ng-bind-html="post.content"></div>
-
-    {{timestring(post.date)}}
-    <a ng-click="update(post)">修改</a> <a ng-click="delete(post)">删除</a>
-
+    <div class="post-foot">
+      {{timestring(post.date)}}
+      <a ng-click="update(post)">修改</a>
+    </div>
   </div>
   <div class="pager">
     <a ng-click="getPosts(page=0,size)"> << </a> &nbsp
-    <a ng-click="getPosts(page=(page>0?page-1:0),size)"> < </a> &nbsp
-    <input ng-model="page">/{{page_count}} &nbsp
-    <a ng-click="getPosts(page=(page<page_ount?page+1:page_count),size)"> > </a> &nbsp
-    <a  ng-click="getPosts(page=page_count,size)"> >> </a>
-</div>
+                                            <a ng-click="getPosts(page=(page>0?page-1:0),size)"> < </a> &nbsp
+                                                                                                   <input ng-model="page">/{{page_count}} &nbsp
+                                                                                                   <a ng-click="getPosts(page=(page<page_count?page+1:page_count),size)"> > </a> &nbsp
+                                            <a  ng-click="getPosts(page=page_count,size)"> >> </a>
+    <script src="http://tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script>
+      tinymce.init({
+      selector: "textarea",
+      plugins: "code",
+      entity_encoding : "raw",
+      add_unload_trigger : false,
+      remove_linebreaks : false,
+      apply_source_formatting : false
+      });
+    </script>
+
+  </div>

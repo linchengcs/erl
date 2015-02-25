@@ -63,3 +63,13 @@ a {
     width: 28px;
     height: 22px;
 }
+
+.post-title {
+    background-color:#EEE;
+    font-weight:bold;
+}
+
+.post-foot {
+    background-color:#FFF
+    text-align:right
+}
