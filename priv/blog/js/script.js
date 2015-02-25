@@ -1,6 +1,6 @@
 (function(angular) {
   'use strict';
-  angular.module('ngBlog', ['ngRoute','ngCookies', 'ngSanitize'])
+  angular.module('ngBlog', ['ngRoute','ngCookies', 'ngSanitize', 'ui.tinymce'])
     .config(['$routeProvider', '$locationProvider',
              function($routeProvider, $locationProvider) {
                $routeProvider
@@ -71,9 +71,9 @@
       $scope.page = 0;
       $scope.size = 10;
       $scope.show_form = false;
-      $scope.form = {"title":"day","content":"...","date":0};
+      $scope.form = {"title":"day","content":"","date":0};
       $scope.create = function(){
-        $scope.form = {"title":"day","content":"...","date":0};
+        $scope.form = {"title":"day","content":"","date":0};
         $scope.show_form = true;
       };
       $scope.update = function(old_post){
