@@ -65,11 +65,13 @@ a {
 }
 
 .post-title {
-    background-color:#EEE;
+    background-color:#ECECFF;
     font-weight:bold;
+font-size:1.2em
 }
 
 .post-foot {
-    background-color:#FFF
-    text-align:right
+ float:right;
+	font-size:0.8em;
+font-weight:normal
 }
