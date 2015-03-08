@@ -6,7 +6,7 @@
 
 -include_lib("stdlib/include/qlc.hrl").
 
--record(post,{date,title,content}).
+-record(post,{date,title,content, tag}).
 
 view(ID) ->
     mnesia:dirty_read(post, ID).
@@ -34,7 +34,9 @@ init(_, Req, _Ops) ->
                 _ ->
                     PL = emongo:find(post,"post",[{"date",[{'>=',0}]}],[{offset, Page1*Size1}, {limit, Size1}, {orderby,[{"date",desc}]}]),
                     _PL = [ {struct,  _Y} || [_ | _Y] <- PL],
+%                    io:format("~p",[_PL]),
                     _Out = mochijson2:encode({array, _PL}),
+ %                   io:format("~p",[_Out]),
                     Req2 = cowboy_req:reply(200, [{<<"content-type">>,<<"text/html">>}],_Out, Req1),
                     {ok, Req2, _Ops}
             end;

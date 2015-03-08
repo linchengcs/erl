@@ -28,6 +28,7 @@ put_post(Req, State) ->
     {ok, PostVals, Req3} = cowboy_req:body_qs(Req2),
     Title = proplists:get_value(<<"title">>, PostVals),
     Content = proplists:get_value(<<"content">>, PostVals),
+    Tag = proplists:get_value(<<"tag">>, PostVals),
     Date = proplists:get_value(<<"date">>, PostVals),
     Date1 = case Date of
                 <<"0">> ->
@@ -36,7 +37,7 @@ put_post(Req, State) ->
                 _Other -> list_to_integer(binary_to_list(Date))
             end,
     io:format("~p~p~p~p~p~p",[Method,HasBody,PostVals,Title,Content, Date1]),
-    emongo:update(post, "post", [{"date", Date1}], [{"title",Title}, {"content", Content}, {"date", Date1}], true),
+    emongo:update(post, "post", [{"date", Date1}], [{"title",Title}, {"content", Content}, {"date", Date1}, {"tag", Tag}], true),
 %    emongo:insert(post, "post", [{"title",Title}, {"content", Content}, {"date", Date1}]),
 
     Req1 = Req3,
