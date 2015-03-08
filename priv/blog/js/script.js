@@ -71,9 +71,9 @@
       $scope.page = 0;
       $scope.size = 10;
       $scope.show_form = false;
-      $scope.form = {"title":"day","content":"","date":0};
+      $scope.form = {"title":"day","content":"","date":0, "tag":"day"};
       $scope.create = function(){
-        $scope.form = {"title":"day","content":"","date":0};
+        $scope.form = {"title":"day","content":"","date":0, "tag":"day"};
         $scope.show_form = true;
       };
       $scope.update = function(old_post){
@@ -137,6 +137,8 @@
             }else{
               $scope.page_count = Math.floor(data.post_count/$scope.size);
             }
+  //          alert(data[0].title);
+//      alert($scope.posts);
           })
           .error(function (data, status, header, config) {
             alert('getPost fail');
@@ -145,7 +147,7 @@
       };
       $scope.getPosts(-1, $scope.size);
       $scope.getPosts($scope.page, $scope.size);
-      $scope.timestring = function(seconds) {
+     $scope.timestring = function(seconds) {
         return (new Date((seconds - 62167241434 - 6600)*1000)).toLocaleString();
       };
     }]);
