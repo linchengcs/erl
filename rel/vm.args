@@ -1,4 +1,4 @@
--name blog@127.0.0.1
--setcookie blog
+-name 'rick@182.92.214.163'
+-setcookie 123456
 -mnesia dir '"/home/rick/workspace/erl/db"'
 -heart

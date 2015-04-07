@@ -16,7 +16,8 @@ handle(Req, State) ->
     {ok, PostVals, Req3} = cowboy_req:body_qs(Req2),
     Title = proplists:get_value(<<"title">>, PostVals),
     Content = proplists:get_value(<<"content">>, PostVals),
-    io:format("~p~p~p~p~p",[Method,HasBody,PostVals,Title,Content]),
+    Tag = proplists:get_value(<<"tag">>, PostVals),
+    io:format("~p~p~p~p~p~p",[Method,HasBody,PostVals,Title,Content, Tag]),
     Current = calendar:local_time(),
     Ts = calendar:datetime_to_gregorian_seconds(Current),
     tables:post(Title,Content,Ts),
@@ -32,9 +33,10 @@ handle(Req, State) ->
     %% file:write_file("upload", Data),
     %% io:format("Received file ~p of content-type ~p as follow:~n~p~n~n",
     %%           [Filename, ContentType, Data]),
+    io:format("~n?LINE~p~p~p~p",[Title,Content, Ts, Tag]),
 
 
-    emongo:insert(post, "post", [{"title",Title}, {"content", Content}, {"date", Ts}]),
+    emongo:insert(post, "post", [{"title",Title}, {"content", Content}, {"date", Ts}, {<<"tag">>, Tag}]),
 
     cowboy_req:reply(200, [
                            {<<"content-type">>, <<"text/plain; charset=utf-8">>}
